@@ -16,3 +16,5 @@ Got the LCD working ans was able to print on the Screen - Hello World.
 Got the PIR motion sensor and buzzer working and also printing on the LCD.
 Worked on the Gas sensor to get it work on it's own and got that working. 
 Worked on the Passcode but only able to enter digits so far so I will be working on this a bit more next week. 
+Worked on getting the Gas sensor and the PIR sensor to detect either in the main project but getting few errors as it is able to read the pir motion sensor but not the Gas sensor.
+Going to stay on working on that and the passcode this week again.
