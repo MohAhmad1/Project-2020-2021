@@ -23,3 +23,7 @@ I'm nearly finished with the passcode as I'm able to put in numbers from 1-9 but
 This week I worked on the sound sensor, and I got that working on its own. Next week I'm going to make it work in the main project.
 Next week hopefully I will have the PIR, Gas and sound sensor working altogether. 
 I'm still working on the passcode nearly finished with it as I made few adjustments so hopefully in the next or two, I should be fully finished with the passcode.
+This week my focus was to finish the Passcode and I was able to finish it and get it fully working correct. I am to put in a code to activate the alarm and if you put the wrong code in it won't activate the alarm.
+I also got the sound sensor working in the main project, it can detect sound and the buzzer and LED goes on when it does.
+Next week I'm going to start on the GSM so it can send text messages when it detects something.
+I am also going to start with the final report as there is only few weeks left to submit.
