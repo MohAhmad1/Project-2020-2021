@@ -1,0 +1,152 @@
+#include <String.h>
+#include "rgb_lcd.h"
+
+// flags
+bool alarmActive = 0;
+bool pass = 0;
+bool statusSensor = 0;
+
+const int potentiometer = A0;        //Rotary Angle Sensor
+const int gasPin= A1;                //Gas sensor
+const int touchSensor = 2;           //Touch Sensor
+const int pinLed = 3;                //LED
+const int pinBuz = 4;                //Buzzer
+const int soundSensor = 5;           //Sound sensor
+const int PIR_motion_sensor = 6;     //PIR sensor  
+
+const int PASS[4]= {2,2,3,3};        //Password
+
+// variables
+int smoke_level;
+rgb_lcd lcd;
+
+void setup()
+{
+    lcd.begin(0, 0); // Clears screen to start off
+
+    pinMode(potentiometer, INPUT);      // Configure the rotary angle sensor pin for output
+    pinMode(gasPin, INPUT);           //Configure the Touch pin for input
+    pinMode(touchSensor, INPUT);        // Configure the touch sensor for input
+    pinMode(pinLed, OUTPUT);         // Configure the LED pin for output
+    pinMode(pinBuz,OUTPUT);         // Configure the buzzer pin for output
+    pinMode(soundSensor, INPUT);      //Configure the Sound sensor for input
+    pinMode(PIR_motion_sensor,INPUT);  // Configure the Touch pin for input
+    
+    do
+    {
+        if(checkPass()) 
+        {
+         lcd.print("Password Correct");        //Prints Password Correct
+         delay(1000);                          //Delay
+         lcd.clear();                          //Clears screen
+         lcd.print("Alarm Activated");         //Prints Alarm Activated
+         alarmActive = 1;
+         pass = 1;
+      }
+      else
+      {
+         lcd.clear();                         //Clears screen
+         lcd.print("Pass Incorrect");         //Prints Password incorrect
+         delay(1000);                         //Delay
+         lcd.clear();                         //Clears screen
+      }
+    }while(pass == 0);
+     
+     
+}
+
+bool checkPass()
+{
+  bool goodPassword = 0;
+  int keyIn;
+  int key[4];                         
+  int star;                           
+  int i;
+  int value;
+  lcd.print("Enter Password:");      //Prints Enter Password
+    delay(1500);                    //Delay
+    lcd.clear();                    //Clears screen
+    for(i=0;i<=3;i++)               //Does this loop 4 times
+    {
+       do{
+            lcd.clear();                          //Clears screen
+            lcd.setCursor(0,0);
+            value = analogRead(potentiometer);    //Read the state of the potentiometer value:
+            keyIn = value/100;                    //Reads numbers from 1-10
+            star =i;
+            while(star>0)                         //Greater the 0
+            {
+               lcd.print('*');                    //Prints *
+               star--;                            
+            }
+            Serial.print(keyIn);
+            lcd.print(keyIn);                      //Prints key
+            delay(500);                            //Delay
+         }while(digitalRead(touchSensor)== 0);
+          if(digitalRead(touchSensor))            //Reads the number
+          {
+                key[i] = keyIn;                 //Prints number
+                delay(500);                     //Delay
+          }
+    }
+    lcd.setCursor(0,1);     // Moves it onto the next line                  
+    if(key[0] ==PASS [0] && key[1] == PASS [1] && key[2] == PASS [2] && key[3] == PASS [3])      //Password
+      goodPassword = 1;
+     else
+       goodPassword = 0;
+     return goodPassword;
+
+     
+}
+
+void loop()
+{
+ 
+     if(alarmActive)
+    {                  
+       if(digitalRead(PIR_motion_sensor))     //Read the state of the PIR value:
+       {
+          digitalWrite(pinBuz,1);             //Buzzer on
+          digitalWrite(pinLed, HIGH);         //LED on
+          lcd.clear();                        //Clears screen
+          lcd.print("Burglar!!");             //Prints Burgler
+          while(1){
+          }
+          delay(1000);                        //Delay
+          digitalWrite(pinLed, LOW);          //LED off
+          digitalWrite(pinBuz,0);             //Buzzer off
+          lcd.clear();                        //Clears screen
+       }
+       if(statusSensor = digitalRead(soundSensor))
+        if (statusSensor == 1)
+        {
+          digitalWrite(pinBuz,1);             //Buzzer on
+          digitalWrite(pinLed, HIGH);         //LED on
+          lcd.clear();                        //Clears screen
+          lcd.print("Sound heard!!");         //Prints Sound heard
+          while(1){
+          }
+          delay(1000);                        //Delay
+          digitalWrite(pinLed, LOW);          //LED off
+          digitalWrite(pinBuz,0);             //Buzzer off
+          lcd.clear();                        //Clears screen
+        }
+
+       
+       if(smoke_level= analogRead(gasPin))
+         if(smoke_level > 80)
+          {
+          digitalWrite(pinBuz,1);             //Buzzer on
+          digitalWrite(pinLed, HIGH);         //LED on
+          lcd.clear();                        //Clears screen.
+          lcd.print("Gas!!");                 //Prints Gas
+          while(1){
+          }
+          delay(1000);                        //Delay
+         digitalWrite(pinLed, LOW);           //LED off
+         digitalWrite(pinBuz,0);              //Buzzer off
+          lcd.clear();                        //Clears screen
+          }    
+    }
+        delay(1000);                          //Delay
+}
